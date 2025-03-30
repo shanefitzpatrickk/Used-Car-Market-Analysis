@@ -6,13 +6,13 @@ Shane Fitzpatrick, Jacob Spano, Joseph Cicero, Leo Morifuji, Christian Cuevas
 
 My Contributions: I focused primarily on data preparation, visualization, and statistical analysis regarding car specifications.
 
-1. Data Preparation and Cleaning
+1. Data Preparation and Cleaning:
 Imported the dataset and eliminated unnecessary columns.
 Examined dataset structure and verified data quality.
-2. Feature Engineering
+2. Feature Engineering:
 Utilized the stringr package in R to extract numeric cylinder count from the "Engine.Information.Engine.Type" column.
 Converted extracted cylinder counts to numeric format, facilitating further analysis.
-3. Statistical Analysis and Visualization
+3. Statistical Analysis and Visualization:
 Computed the average horsepower for each cylinder count.
 Created visualizations in ggplot2 showing a clear relationship between cylinder count and horsepower.
 Conducted correlation analyses between cylinders and horsepower, providing insights into vehicle performance.
