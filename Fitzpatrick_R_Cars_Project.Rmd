@@ -1,0 +1,72 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(lsr)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+
+setwd("/Users/shanefitzpatrick/Desktop/DIDA 130")
+cars <- read.csv ("cars-2.csv")
+cars %>% head()
+str(cars)
+```
+```{r}
+cars2 = select(cars, -1:-3)
+cars2 %>% head()
+
+```
+```{r}
+# Extract # of cylinders accounting for cylinder and Cylinders
+cars2 <- cars2 %>%
+  mutate(Cylinders = str_extract(`Engine.Information.Engine.Type`, "\\d+\\s*[Cc]ylinders?")) %>%
+  # Remove any remaining spaces and convert to numeric
+  mutate(Cylinders = as.numeric(str_extract(Cylinders, "\\d+")))
+
+# Calculate average City and Highway mpg by cylinder type
+cars2_clean <- cars2 %>%
+  filter(!is.na(Cylinders) & !is.na('Engine.Information.Engine.Statistics.Horsepower'))
+ggplot(cars2_clean, aes(x = as.factor(Cylinders), y = 'Engine.Information.Engine.Statistics.Horsepower', fill = as.factor(Cylinders))) +
+  geom_bar(stat = "identity") +
+  labs(title = "Torque vs Horsepower",
+       x = "Number of Cylinders",
+       y = "Horsepower") +
+  scale_fill_discrete(name = "Cylinders") +
+  theme_minimal()
+
+```
+```{r}
+
+
+#Extracting only the number of cylinders from the engine type column
+cars2 <- cars2 %>%
+  mutate(Cylinders = str_extract(`Engine.Information.Engine.Type`, "\\d+\\s*[Cc]ylinders?")) %>%
+  #Get rid of spaces + convert cylinders to numeric
+  mutate(Cylinders = as.numeric(str_extract(Cylinders, "\\d+")))
+
+#Filtering + calculating average horsepower by cylinder count
+cars2_clean <- cars2 %>%
+  filter(!is.na(Cylinders) & !is.na(`Engine.Information.Engine.Statistics.Horsepower`)) %>%
+  group_by(Cylinders) %>%
+  summarise(Avg_Horsepower = mean(`Engine.Information.Engine.Statistics.Horsepower`, na.rm = TRUE))
+
+#Plotting the average horsepower by cylinder count
+ggplot(cars2_clean, aes(x = as.factor(Cylinders), y = Avg_Horsepower, fill = as.factor(Cylinders))) +
+  geom_bar(stat = "identity") +
+  labs(title = "Figure 4: Average Horsepower by Cylinder Count",
+       x = "Number of Cylinders",
+       y = "Average Horsepower") +
+  scale_fill_discrete(name = "Cylinders") +
+  theme_minimal()
+
+```
+```{r}
+cor(cars2_clean$Cylinders, cars2_clean$Avg_Horsepower, use = "complete.obs")
+
+```
+```{r}
+
+
